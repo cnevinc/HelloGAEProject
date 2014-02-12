@@ -1,10 +1,11 @@
 <?php
     require_once 'google/appengine/api/users/UserService.php';  
 
+	// ============================User service==================================
     use google\appengine\api\users\User;
     use google\appengine\api\users\UserService;
 
-    $user = UserService::getCurrentUser();  // 如果使用者已經登入，此處的$user不為null
+    $user = UserService::getCurrentUser();  // 取得目前已經登入的使用者
 
     if ($user===null) {
         header('Location: ' .                                       // 如果未登入，將使用者導向登入頁面，
@@ -16,20 +17,23 @@
 <html>
 <head>	
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-
 <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
 </head>
 <body>
 
 <?php
-    // 如果已經登入，顯示使用者的暱稱以及以下內容
-    echo 'Hello, [' . htmlspecialchars($user->getNickname()) ."] ";
+    
+    echo 'Hello, [' . htmlspecialchars($user->getNickname()) ."] ";		// 顯示使用者的暱稱
     echo 'Not you? <a href=' . UserService::createLogoutURL($_SERVER['REQUEST_URI']).">Sing Out</a>"."<BR>";	
-	phpinfo();
-	// Local Development
-	//$db = new PDO('mysql:host=localhost;dbname=guestbook');
-	$db = new PDO('mysql:unix_socket=/cloudsql/regal-center-453:guestbook;dbname=guestbook;charset=utf8','root',  '');
-
+	// ============================User service==================================
+	
+	
+	// ============================Cloud SQL==================================
+	// Development DB
+	$db = new PDO('mysql:host=localhost;dbname=guestbook','root','');
+	// Production DB
+	//$db = new PDO('mysql:unix_socket=/cloudsql/regal-center-453:guestbook;dbname=guestbook;charset=utf8','root',  '');
+	// ============================Cloud SQL==================================
 
 	// 一個簡單的form, 儲存POST過來的資料
     if (array_key_exists('content', $_POST)) {
